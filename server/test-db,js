@@ -1,0 +1,83 @@
+import * as db from './database.js';
+
+async function testDatabase() {
+  console.log('\n🔍 Starting database tests...\n');
+
+  try {
+    // Test 1: User Creation & Retrieval
+    console.log('Test 1: User Creation & Retrieval');
+    console.log('----------------------------------');
+    
+    const testUser = {
+      id: 'test-' + Date.now(),
+      email: `test${Date.now()}@example.com`,
+      password: 'test123'
+    };
+
+    console.log('➡️  Creating test user:', testUser.email);
+    await db.createUser(testUser.id, testUser.email, testUser.password);
+    console.log('✅ User created successfully\n');
+    
+    console.log('➡️  Retrieving test user...');
+    const retrievedUser = await db.getUserByEmail(testUser.email);
+    console.log('✅ User retrieved successfully:', {
+      id: retrievedUser.id,
+      email: retrievedUser.email
+    }, '\n');
+
+    // Test 2: Vision Item Operations
+    console.log('Test 2: Vision Item Operations');
+    console.log('------------------------------');
+    
+    const visionItem = {
+      id: 'vision-' + Date.now(),
+      userId: testUser.id,
+      imageUrl: 'https://example.com/test.jpg',
+      section: 'career',
+      text: 'Test vision item',
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 100,
+      zIndex: 1
+    };
+
+    console.log('➡️  Creating vision item...');
+    await db.createVisionItem(visionItem);
+    console.log('✅ Vision item created successfully\n');
+
+    console.log('➡️  Retrieving vision items...');
+    const visionItems = await db.getVisionItems(testUser.id);
+    console.log('✅ Vision items retrieved:', visionItems.length, 'items found\n');
+
+    // Test 3: Energy Entry Operations
+    console.log('Test 3: Energy Entry Operations');
+    console.log('------------------------------');
+    
+    const energyEntry = {
+      id: 'energy-' + Date.now(),
+      userId: testUser.id,
+      date: new Date().toISOString().split('T')[0],
+      level: 4,
+      notes: 'Test energy entry'
+    };
+
+    console.log('➡️  Creating energy entry...');
+    await db.createEnergyEntry(energyEntry);
+    console.log('✅ Energy entry created successfully\n');
+
+    console.log('➡️  Retrieving energy entries...');
+    const energyEntries = await db.getEnergyEntries(testUser.id);
+    console.log('✅ Energy entries retrieved:', energyEntries.length, 'entries found\n');
+
+    console.log('🎉 All database tests passed successfully! 🎉\n');
+    console.log('Database is properly configured and working.\n');
+
+  } catch (error) {
+    console.error('\n❌ Database test failed:', error.message);
+    console.error('\nError details:', error);
+    process.exit(1);
+  }
+}
+
+testDatabase();
