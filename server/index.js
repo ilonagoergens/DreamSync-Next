@@ -5,7 +5,7 @@ import express from "express";
 import cors from "cors";
 import bcrypt from "bcryptjs";
 import { generateToken, authMiddleware } from "./auth.js";
-import { initializeDatabase, getDatabase, closeDatabase } from "./database.js";
+import { initializeDatabase, getDatabase, closeDatabase, createVisionItem, updateVisionItem, deleteVisionItem } from "./database.js";
 
 dotenv.config();
 
@@ -299,6 +299,80 @@ async function startServer() {
           .json({ error: "Vision Items konnten nicht geladen werden" });
       }
     });
+
+    app.post("/api/vision-items", authMiddleware, async (req, res) => {
+      try {
+        const db = await getDatabase();
+        const userId = req.user.userId;
+        const {
+          image_url, section, text, x, y, width, height, zIndex
+        } = req.body;
+    
+        const id = generateUUID();
+        const item = {
+          id,
+          userId,
+          imageUrl: image_url,
+          section,
+          text,
+          x,
+          y,
+          width,
+          height,
+          zIndex
+        };
+    
+        await createVisionItem(item);
+        res.status(201).json({ ...item, image_url });
+      } catch (error) {
+        console.error("❌ Fehler beim Erstellen eines Vision-Items:", error);
+        res.status(500).json({ error: "Vision Item konnte nicht erstellt werden" });
+      }
+    });
+
+    app.put("/api/vision-items/:id", authMiddleware, async (req, res) => {
+      try {
+        const db = await getDatabase();
+        const userId = req.user.userId;
+        const { id } = req.params;
+        const {
+          image_url, section, text, x, y, width, height, zIndex
+        } = req.body;
+    
+        const updates = {
+          imageUrl: image_url,
+          section,
+          text,
+          x,
+          y,
+          width,
+          height,
+          zIndex
+        };
+    
+        const updated = await updateVisionItem(id, userId, updates);
+        res.json({ ...updated, image_url });
+      } catch (error) {
+        console.error("❌ Fehler beim Aktualisieren des Vision-Items:", error);
+        res.status(500).json({ error: "Vision Item konnte nicht aktualisiert werden" });
+      }
+    });
+    
+    app.delete("/api/vision-items/:id", authMiddleware, async (req, res) => {
+      try {
+        const db = await getDatabase();
+        const userId = req.user.userId;
+        const { id } = req.params;
+    
+        await deleteVisionItem(id, userId);
+        res.json({ success: true });
+      } catch (error) {
+        console.error("❌ Fehler beim Löschen des Vision-Items:", error);
+        res.status(500).json({ error: "Vision Item konnte nicht gelöscht werden" });
+      }
+    });
+    
+    
 
     // 🔄 Empfehlungen abrufen
     app.get("/api/recommendations", authMiddleware, async (req, res) => {

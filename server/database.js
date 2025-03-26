@@ -175,20 +175,21 @@ export async function updateVisionItem(id, userId, updates) {
       WHERE id = ? AND user_id = ?
     `,
     args: [
-      updates.imageUrl,
-      updates.section,
-      updates.text,
-      updates.x,
-      updates.y,
-      updates.width,
-      updates.height,
-      updates.zIndex,
+      updates.imageUrl ?? null,
+      updates.section ?? null,
+      updates.text ?? null,
+      updates.x ?? 0,
+      updates.y ?? 0,
+      updates.width ?? 150,
+      updates.height ?? 150,
+      updates.zIndex ?? 0,
       id,
       userId
     ]
   });
   return { id, ...updates };
 }
+
 
 export async function deleteVisionItem(id, userId) {
   const db = await getDatabase();
