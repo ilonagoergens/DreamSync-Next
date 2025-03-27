@@ -33,6 +33,10 @@ jobs:
                 file: Dockerfile.backend
                 push: true # sorgt dafür, dass das Image gepusht wird
                 tags: ${{ secrets.DOCKER_USERNAME }}/backend:latest
+                build-args: |
+                  JWT_SECRET=${{ secrets.JWT_SECRET }}
+                  PORT=${{ secrets.PORT }}
+                  CLIENT_ORIGIN=${{ secrets.CLIENT_ORIGIN }}
             # Frontend Image bauen und pushen
             - name: Build and push Frontend Image
               uses: docker/build-push-action@v2
@@ -41,3 +45,6 @@ jobs:
                 file: Dockerfile.frontend
                 push: true
                 tags: ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+                build-args: |
+                  VITE_API_URL=${{ secrets.VITE_API_URL }}
+                  VITE_CLIENT_URL=${{ secrets.VITE_CLIENT_URL }}
