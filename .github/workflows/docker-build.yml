@@ -1,0 +1,36 @@
+name: Build und push Docker Images
+
+on:
+  push:
+    branches: [ main ] # bei push auf die main
+
+jobs:
+    build-and-push:
+        runs-on: ubuntu-latest # die issolierte Umgebung von GitHub Actions
+
+        steps:
+            # Repository auschecken
+            - name: Checkout Repository
+              uses: actions/checkout@v2
+            # Docker login datem von GitHub Secrets
+            - name: Login to Docker Hub
+              uses: docker/login-action@v2
+              with:
+                username: ${{ secrets.DOCKER_USERNAME }}
+                password: ${{ secrets.DOCKER_PASSWORD }}
+            # Backend Image bauen und pushen
+            - name: Build and push Backend Image
+              uses: docker/build-push-action@v2
+              with:
+                context: . 
+                file: Dockerfile.backend
+                push: true # sorgt dafür, dass das Image gepusht wird
+                tags: ${{ secrets.DOCKER_USERNAME }}/backend:latest
+            # Frontend Image bauen und pushen
+            - name: Build and push Frontend Image
+              uses: docker/build-push-action@v2
+              with:
+                context: . 
+                file: Dockerfile.frontend
+                push: true
+                tags: ${{ secrets.DOCKER_USERNAME }}/frontend:latest

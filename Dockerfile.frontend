@@ -1,9 +1,9 @@
 # Stage 1: React App bauen
 FROM node:20-alpine AS build
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
+COPY frontend/package*.json ./
+RUN npm install --include=dev
+COPY frontend ./
 COPY .env .env
 RUN npm run build
 

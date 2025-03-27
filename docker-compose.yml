@@ -5,20 +5,18 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.backend
+    container_name: dreamsync-backend
     ports:
       - "${PORT}:${PORT}"
     env_file:
       - .env
-    volumes:
-      - type: bind
-        source: ./server
-        target: /app/server
     restart: unless-stopped
 
   frontend:
     build:
       context: .
       dockerfile: Dockerfile.frontend
+    container_name: dreamsync-frontend
     ports:
       - "8080:80"
     depends_on:
