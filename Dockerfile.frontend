@@ -4,7 +4,6 @@ WORKDIR /app
 COPY frontend/package*.json ./
 RUN npm install --include=dev
 COPY frontend ./
-COPY .env .env
 RUN npm run build
 
 # Stage 2: Statische Dateien mit Nginx servieren
