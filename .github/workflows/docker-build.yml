@@ -8,6 +8,13 @@ jobs:
     build-and-push:
         runs-on: ubuntu-latest # die issolierte Umgebung von GitHub Actions
 
+        env: # Umgebungsvariablen
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          PORT: ${{ secrets.PORT }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_CLIENT_URL: ${{ secrets.VITE_CLIENT_URL }}
+          CLIENT_ORIGIN: ${{ secrets.CLIENT_ORIGIN }}
+
         steps:
             # Repository auschecken
             - name: Checkout Repository
