@@ -26,7 +26,7 @@ const allowedOrigins = process.env.CLIENT_ORIGIN
       "http://localhost:5173",
       "http://127.0.0.1:5173",
       "http://localhost:8080",
-      "ttp://18.159.135.115:3000",
+      "http://18.159.135.115"
     ];
 console.log("CLIENT_ORIGIN:", process.env.CLIENT_ORIGIN);
 console.log("allowedOrigins:", allowedOrigins);
