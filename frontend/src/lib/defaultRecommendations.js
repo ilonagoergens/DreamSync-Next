@@ -9,7 +9,7 @@ export const defaultRecommendations = {
       title: 'Geführte Meditation für mehr Energie',
       description: 'Eine sanfte 10-minütige Meditation, die dir hilft, deine Energie wieder aufzuladen und dich zu erden.',
       type: 'meditation',
-      link: 'https://www.youtube.com/watch?v=O-6f5wQXSu8',
+      link: 'https://www.youtube.com/watch?v=AdGUYhwojGU',
       isDefault: true,
       energyLevel: 'low'
     },
@@ -18,7 +18,7 @@ export const defaultRecommendations = {
       title: 'Beruhigende Klanglandschaften',
       description: 'Entspannende Naturklänge und sanfte Musik, die deine Stimmung heben und dich beruhigen.',
       type: 'music',
-      link: 'https://www.youtube.com/watch?v=lFcSrYw-ARY',
+      link: 'https://www.youtube.com/watch?v=pRtVNjv0NWs',
       isDefault: true,
       energyLevel: 'low'
     },
@@ -27,7 +27,7 @@ export const defaultRecommendations = {
       title: 'EFT Tapping für Erschöpfung',
       description: 'Eine einfache Tapping-Routine, die dir hilft, Blockaden zu lösen und neue Energie zu finden.',
       type: 'meditation',
-      link: 'https://www.youtube.com/watch?v=K6kq9N9Yp6E',
+      link: 'https://www.youtube.com/watch?v=bFwap7I8btU',
       isDefault: true,
       energyLevel: 'low'
     }
@@ -38,7 +38,7 @@ export const defaultRecommendations = {
       title: '4-7-8 Atemtechnik',
       description: 'Eine kraftvolle Atemübung, die Stress reduziert und dein Nervensystem beruhigt.',
       type: 'breathing',
-      link: 'https://www.youtube.com/watch?v=YRPh_GaiL8s',
+      link: 'https://www.youtube.com/watch?v=LiUnFJ8P4gM',
       isDefault: true,
       energyLevel: 'medium'
     },
@@ -55,6 +55,7 @@ export const defaultRecommendations = {
       title: 'Positive Affirmationen',
       description: 'Kraftvolle Affirmationen für innere Ruhe',
       type: 'meditation',
+      link: 'https://www.youtube.com/watch?v=H1AM0-9koVc',
       isDefault: true,
       energyLevel: 'medium'
     }
@@ -70,10 +71,10 @@ export const defaultRecommendations = {
     },
     {
       id: 'default-high-2',
-      title: 'Motivierende TED Talks',
+      title: 'Motivierende Talks',
       description: 'Inspirierende Vorträge, die dich motivieren, deine Ziele zu verfolgen.',
       type: 'video',
-      link: 'https://www.youtube.com/watch?v=H14bBuluwB8',
+      link: 'https://www.youtube.com/watch?v=HyaRgych_yk',
       isDefault: true,
       energyLevel: 'high'
     },
@@ -82,6 +83,7 @@ export const defaultRecommendations = {
       title: 'Bücher für persönliches Wachstum',
       description: 'Empfehlungen für Bücher, die dir helfen, dein Mindset zu stärken.',
       type: 'reading',
+      link: 'https://www.audible.de/blog/laura-malina-seiler-buchempfehlungen',
       isDefault: true,
       energyLevel: 'high'
     }
