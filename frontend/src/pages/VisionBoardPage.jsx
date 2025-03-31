@@ -194,7 +194,7 @@ function VisionBoardPage() {
     <div className="space-y-6 p-4">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold flex items-center gap-2">
-          <Target /> Mein Vision Board
+          <Target /> ein Vision Board
         </h2>
         <div className="flex gap-2">
           <button
