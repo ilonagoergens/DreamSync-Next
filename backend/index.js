@@ -15,7 +15,7 @@ let server;
 
 const allowedOrigins = process.env.CLIENT_ORIGIN
   ? process.env.CLIENT_ORIGIN.split(",")
-  : ["http://localhost:5173", 'http://localhost:8080', 'http://www.dreamsync.pro'];
+  : ["http://localhost:5173", 'http://localhost:8080', 'http://www.dreamsync.pro', "https://www.dreamsync.pro"];
 
 function generateUUID() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
