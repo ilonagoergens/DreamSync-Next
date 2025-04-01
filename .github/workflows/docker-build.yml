@@ -63,6 +63,8 @@ jobs:
           script: |
            cd /home/ubuntu/DreamSync-Next || git clone https://github.com/${{ github.repository }} /home/ubuntu/DreamSync-Next && cd /home/ubuntu/DreamSync-Next
 
+           cp /home/ubuntu/.env .env
+
            docker compose down
            docker compose up -d --build
 
