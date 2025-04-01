@@ -18,23 +18,8 @@ services:
       dockerfile: Dockerfile.frontend
     container_name: dreamsync-frontend
     ports:
-      - "80:80"
-      - "443:443"
+      - "8080:80"
     depends_on:
       - backend
     restart: unless-stopped
-    volumes:
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/www/certbot
-
-  certbot:
-    image: certbot/certbot
-    volumes:
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/www/certbot
-    command: certonly --webroot --webroot-path=/var/www/certbot --email deine@email.de --agree-tos --no-eff-email -d www.dreamsync.pro
-
-volumes:
-  certbot-etc:
-  certbot-var:
 
