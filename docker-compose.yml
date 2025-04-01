@@ -11,6 +11,8 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+    volumes:
+      - ./backend/data:/app/backend/data
 
   frontend:
     build:
