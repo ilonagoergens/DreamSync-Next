@@ -61,6 +61,8 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            docker network inspect dreamsync-net >/dev/null 2>&1 || docker network create dreamsync-net
+
             docker stop dreamsync-backend || true
             docker rm dreamsync-backend || true
             docker rmi ${{ secrets.DOCKER_USERNAME }}/backend:latest || true
