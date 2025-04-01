@@ -61,15 +61,14 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-           cd /home/ubuntu/DreamSync-Next || git clone https://github.com/${{ github.repository }} /home/ubuntu/DreamSync-Next && cd /home/ubuntu/DreamSync-Next
+            docker stop dreamsync-backend || true
+            docker rm dreamsync-backend || true
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/backend:latest || true
+            docker pull ${{ secrets.DOCKER_USERNAME }}/backend:latest
+            docker run -d --name dreamsync-backend --env-file /home/ubuntu/.env -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/backend:latest
 
-           cp /home/ubuntu/.env .env
-
-           docker stop dreamsync-backend || true
-           docker rm dreamsync-backend || true
-           docker stop dreamsync-frontend || true
-           docker rm dreamsync-frontend || true
-
-           docker compose down --remove-orphans
-           docker compose up -d --build
-
+            docker stop dreamsync-frontend || true
+            docker rm dreamsync-frontend || true
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/frontend:latest || true
+            docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+            docker run -d --name dreamsync-frontend -p 80:80 ${{ secrets.DOCKER_USERNAME }}/frontend:latest
