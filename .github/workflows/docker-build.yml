@@ -65,7 +65,13 @@ jobs:
             docker rm dreamsync-backend || true
             docker rmi ${{ secrets.DOCKER_USERNAME }}/backend:latest || true
             docker pull ${{ secrets.DOCKER_USERNAME }}/backend:latest
-            docker run -d --name dreamsync-backend --env-file /home/ubuntu/.env -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/backend:latest
+            docker run -d \
+              --name dreamsync-backend \
+              --env-file /home/ubuntu/.env \
+              -p 3000:3000 \
+              -v /home/ubuntu/data:/app/backend/data \
+              ${{ secrets.DOCKER_USERNAME }}/backend:latest
+
 
             docker stop dreamsync-frontend || true
             docker rm dreamsync-frontend || true
