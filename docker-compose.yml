@@ -23,4 +23,18 @@ services:
     depends_on:
       - backend
     restart: unless-stopped
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/www/certbot
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/www/certbot
+    command: certonly --webroot --webroot-path=/var/www/certbot --email deine@email.de --agree-tos --no-eff-email -d www.dreamsync.pro
+
+volumes:
+  certbot-etc:
+  certbot-var:
 
