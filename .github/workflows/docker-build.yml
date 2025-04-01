@@ -65,6 +65,11 @@ jobs:
 
            cp /home/ubuntu/.env .env
 
+           docker stop dreamsync-backend || true
+           docker rm dreamsync-backend || true
+           docker stop dreamsync-frontend || true
+           docker rm dreamsync-frontend || true
+
            docker compose down --remove-orphans
            docker compose up -d --build
 
