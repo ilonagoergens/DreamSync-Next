@@ -18,7 +18,8 @@ services:
       dockerfile: Dockerfile.frontend
     container_name: dreamsync-frontend
     ports:
-      - "8080:80"
+      - "80:80"
+      - "443:443"
     depends_on:
       - backend
     restart: unless-stopped
