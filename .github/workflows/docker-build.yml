@@ -61,22 +61,8 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker network inspect dreamsync-net >/dev/null 2>&1 || docker network create dreamsync-net
+           cd /home/ubuntu/DreamSync-Next || git clone https://github.com/${{ github.repository }} /home/ubuntu/DreamSync-Next && cd /home/ubuntu/DreamSync-Next
 
-            docker stop dreamsync-backend || true
-            docker rm dreamsync-backend || true
-            docker rmi ${{ secrets.DOCKER_USERNAME }}/backend:latest || true
-            docker pull ${{ secrets.DOCKER_USERNAME }}/backend:latest
-            docker run -d --name dreamsync-backend \
-             --env-file /home/ubuntu/.env \
-             --network dreamsync-net \
-             -p 3000:3000 ilonagoergens/backend:latest
+           docker compose down
+           docker compose up -d --build
 
-
-            docker stop dreamsync-frontend || true
-            docker rm dreamsync-frontend || true
-            docker rmi ${{ secrets.DOCKER_USERNAME }}/frontend:latest || true
-            docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:latest
-            docker run -d --name dreamsync-frontend \
-             --network dreamsync-net \
-             -p 80:80 -p 443:443 ilonagoergens/frontend:latest
