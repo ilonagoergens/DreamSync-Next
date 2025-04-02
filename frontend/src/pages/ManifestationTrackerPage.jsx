@@ -69,11 +69,9 @@ function ManifestationTrackerPage() {
   ];
 
   const sortedManifestations = [...manifestations].sort((a, b) => {
-    // Sort by completion status (incomplete first)
     if (a.completed !== b.completed) {
       return a.completed ? 1 : -1;
     }
-    // Then sort by date (newest first)
     return new Date(b.date) - new Date(a.date);
   });
 

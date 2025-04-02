@@ -116,7 +116,7 @@ function RecommendationsPage() {
           editingRecommendation
         );
       } else {
-        await recommendationApi.create(editingRecommendation); // ✅ Nur das Objekt übergeben
+        await recommendationApi.create(editingRecommendation);
       }
 
       setIsEditing(false);
@@ -149,7 +149,7 @@ function RecommendationsPage() {
     setIsEditing(true);
     setEditingRecommendation({
       ...rec,
-      energyLevel: rec.energy_level || energyInfo.category, // 🔥 Fix!
+      energyLevel: rec.energy_level || energyInfo.category,
     });
   };
 
