@@ -17,10 +17,9 @@ function AuthPage() {
     setError(null);
 
     try {
-      if (isRegistering) {
-        await registerWithEmail(email, password);
-      } else {
-        const res = await loginWithEmail(email, password);
+      const authFn = isRegistering ? registerWithEmail : loginWithEmail;
+      const res = await authFn(email, password);
+
         console.log("🔑 Login-Response:", res);
 
         const [energyRes, manifestationRes, visionRes] = await Promise.all([
@@ -38,7 +37,6 @@ function AuthPage() {
         });
 
         console.log("✅ Daten aus der DB geladen!");
-      }
     } catch (error) {
       console.error("❌ Auth-Fehler:", error);
       setError(error.message);
