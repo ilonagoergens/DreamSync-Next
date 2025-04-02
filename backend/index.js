@@ -15,7 +15,7 @@ let server;
 
 const allowedOrigins = process.env.CLIENT_ORIGIN
   ? process.env.CLIENT_ORIGIN.split(",")
-  : ["http://localhost:5173", 'http://localhost:8080', 'https://www.dreamsync.pro'];
+  : ["http://localhost:5173", 'http://localhost:8080', 'https://www.dreamsync.pro', 'https://www.dreamsync.pro']
 
 function generateUUID() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -32,21 +32,24 @@ async function startServer() {
 
     const app = express();
 
-    app.use(
-      cors({
-        origin: function (origin, callback) {
-          if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-          } else {
-            console.log("❌ Nicht erlaubter Origin:", origin);
-            callback(new Error("Nicht erlaubter Origin"));
-          }
-        },
-        credentials: true,
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-      })
-    );
+    // app.use(
+    //   cors({
+    //     origin: function (origin, callback) {
+    //       if (!origin || allowedOrigins.includes(origin)) {
+    //         callback(null, true);
+
+    //       } else {
+    //         console.log("❌ Nicht erlaubter Origin:", origin);
+    //         callback(new Error("Nicht erlaubter Origin"));
+    //       }
+    //     },
+    //     credentials: true,
+    //     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    //     allowedHeaders: ["Content-Type", "Authorization"],
+    //   })
+    // );
+
+    app.use(cors());
 
     app.use(express.json({ limit: "10mb" }));
 
