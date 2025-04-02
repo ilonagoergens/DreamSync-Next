@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   Plus,
   X,
+  ListChecks,
   Target,
   Briefcase,
   Heart,
