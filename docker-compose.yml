@@ -19,8 +19,6 @@ services:
       context: .
       dockerfile: Dockerfile.frontend
     container_name: dreamsync-frontend
-    ports:
-      - "8080:80"
     depends_on:
       - backend
     restart: unless-stopped
