@@ -6,6 +6,6 @@ ENV VITE_API_URL=$VITE_API_URL
 
 COPY backend/package*.json ./
 RUN npm install
-COPY ./backend ./backend
+COPY backend/ ./
 EXPOSE 3000
-CMD ["node", "backend/index.js"]
+CMD ["node", "index.js"]
