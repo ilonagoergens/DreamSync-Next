@@ -13,8 +13,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 let server;
 
-const allowedOrigins =
-   ['https://www.dreamsync.pro']
+const allowedOrigins = process.env.CLIENT_ORIGIN
+  ? process.env.CLIENT_ORIGIN.split(",")
+  : ["http://localhost:5173", 'http://localhost:8080', 'https://www.dreamsync.pro'];
 
 function generateUUID() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -36,7 +37,6 @@ async function startServer() {
         origin: function (origin, callback) {
           if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
-
           } else {
             console.log("❌ Nicht erlaubter Origin:", origin);
             callback(new Error("Nicht erlaubter Origin"));
