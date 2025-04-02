@@ -22,4 +22,10 @@ services:
     depends_on:
       - backend
     restart: unless-stopped
+    networks:
+      - dreamsync-net
+
+networks:
+  dreamsync-net:
+    external: true
 
