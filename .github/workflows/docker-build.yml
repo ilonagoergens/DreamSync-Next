@@ -77,4 +77,4 @@ jobs:
             docker rm dreamsync-frontend || true
             docker rmi ${{ secrets.DOCKER_USERNAME }}/frontend:latest || true
             docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:latest
-            docker run -d --name dreamsync-frontend -p 80:80 ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+            docker run -d --name dreamsync-frontend -p 8080:80 ${{ secrets.DOCKER_USERNAME }}/frontend:latest
