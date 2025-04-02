@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "https://3.124.116.208/api";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://www.dreamsync.pro/api";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
