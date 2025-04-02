@@ -12,7 +12,7 @@ services:
       - .env
     restart: unless-stopped
     volumes:
-      - ./backend/data:/app/backend/data
+      - /home/ubuntu/dreamsync-db:/app/backend/data
 
   frontend:
     build:
