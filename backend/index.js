@@ -521,6 +521,8 @@ async function startServer() {
     server = app.listen(PORT, () => {
       console.log(`🚀 Server läuft auf Port ${PORT}`);
     });
+    return server;
+  
 
     async function shutdown() {
       console.log("⚠️ Server wird heruntergefahren...");
@@ -554,4 +556,8 @@ console.log(
 console.log("PORT:", process.env.PORT);
 console.log("VITE_API_URL:", process.env.VITE_API_URL);
 
-startServer();
+if (process.env.NODE_ENV !== "test") {
+  startServer();
+}
+
+export { startServer };
