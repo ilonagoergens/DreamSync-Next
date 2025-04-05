@@ -3,15 +3,12 @@ import {
   Plus,
   X,
   ListChecks,
-  Target,
   Briefcase,
   Heart,
   Users,
   Sparkles,
-  Upload,
   Download,
   Move,
-  ChevronsUpDown,
 } from "lucide-react";
 import { Rnd } from "react-rnd";
 import { toPng } from "html-to-image";

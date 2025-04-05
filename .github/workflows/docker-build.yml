@@ -1,11 +1,40 @@
-name: Build und push Docker Images
+name: CI/CD Workflow
 
 on:
   push:
     branches: [main] # bei push auf die main
 
 jobs:
+
+  run-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    env:
+      NODE_ENV: test
+      JWT_SECRET: testsecret123
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies (Backend)
+        run: npm install
+
+      - name: Run Backend Tests
+        run: npm run test:backend
+
+      - name: Install Dependencies (Frontend)
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Run Frontend Tests
+        working-directory: ./frontend
+        run: npm run test:frontend
+
   build-and-push:
+    needs: run-tests  # Tests müssen bestanden sein
     runs-on: ubuntu-latest # die issolierte Umgebung von GitHub Actions
 
     env: # Umgebungsvariablen
