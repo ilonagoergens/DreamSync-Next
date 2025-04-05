@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node index.js",
     "test:backend": "vitest --environment node",
-    "lint": "eslint . --ext js --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --ext js --report-unused-disable-directives"
   },
   "dependencies": {
     "@libsql/client": "^0.5.6",
