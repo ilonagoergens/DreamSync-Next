@@ -193,7 +193,8 @@ function VisionBoardPage() {
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold flex items-center gap-2">
         <ListChecks className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-          <span> Mein Vision Board💫</span>
+          <span> Mein Vision Board</span>
+          <p className="text-sm text-gray-500">Hallo aus der Github Pipeline</p>
         </h2>
         <div className="flex gap-2">
           <button
