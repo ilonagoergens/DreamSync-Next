@@ -521,20 +521,6 @@ async function startServer() {
     server = app.listen(PORT, () => {
       console.log(`🚀 Server läuft auf Port ${PORT}`);
     });
-    return server;
-  
-
-    async function shutdown() {
-      console.log("⚠️ Server wird heruntergefahren...");
-      if (server) await new Promise((resolve) => server.close(resolve));
-      try {
-        await closeDatabase();
-        console.log("✅ Datenbankverbindung geschlossen");
-      } catch (err) {
-        console.error("❌ Fehler beim Schließen der Datenbank:", err);
-      }
-      process.exit(0);
-    }
 
     process.on("SIGTERM", shutdown);
     process.on("SIGINT", shutdown);
@@ -542,6 +528,9 @@ async function startServer() {
       console.error("❌ Uncaught Exception:", err);
       shutdown();
     });
+
+    return server;
+
   } catch (error) {
     console.error("❌ Fehler beim Starten des Servers:", error);
     process.exit(1);
@@ -561,3 +550,16 @@ if (process.env.NODE_ENV !== "test") {
 }
 
 export { startServer };
+
+async function shutdown() {
+  console.log("⚠️ Server wird heruntergefahren...");
+  if (server) await new Promise((resolve) => server.close(resolve));
+  try {
+    await closeDatabase();
+    console.log("✅ Datenbankverbindung geschlossen");
+  } catch (err) {
+    console.error("❌ Fehler beim Schließen der Datenbank:", err);
+  }
+  process.exit(0);
+}
+
