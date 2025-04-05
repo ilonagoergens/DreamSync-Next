@@ -25,68 +25,6 @@ function generateUUID() {
   });
 }
 
-export async function createServer() {
-  await initializeDatabase();
-  console.log("✅ Datenbank erfolgreich initialisiert");
-
-  const app = express();
-
-  app.use(
-    cors({
-      origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-          callback(null, true);
-        } else {
-          console.log("❌ Nicht erlaubter Origin:", origin);
-          callback(new Error("Nicht erlaubter Origin"));
-        }
-      },
-      credentials: true,
-      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-      allowedHeaders: ["Content-Type", "Authorization"],
-    })
-  );
-
-  app.use(express.json({ limit: "10mb" }));
-
-  // ⬇️ Deine ganzen Routen kommen hier hin (unverändert)
-  // 🔐 Auth Routes
-  app.post("/api/auth/register", async (req, res) => {
-    try {
-      const { email, password } = req.body;
-      const db = await getDatabase();
-
-      const existingUser = await db.execute({
-        sql: "SELECT * FROM users WHERE email = ?",
-        args: [email],
-      });
-
-      if (existingUser.rows.length > 0) {
-        return res
-          .status(400)
-          .json({ error: "E-Mail-Adresse wird bereits verwendet" });
-      }
-
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const userId = generateUUID();
-
-      await db.execute({
-        sql: "INSERT INTO users (id, email, password) VALUES (?, ?, ?)",
-        args: [userId, email, hashedPassword],
-      });
-
-      const token = generateToken(userId);
-      res.json({
-        token,
-        userId,
-        profile: { email, name: email.split("@")[0] },
-      });
-    } catch (error) {
-      console.error("❌ Registrierungsfehler:", error);
-      res.status(500).json({ error: "Registrierung fehlgeschlagen" });
-    }
-  });
-
 async function startServer() {
   try {
     await initializeDatabase();
@@ -608,9 +546,6 @@ async function startServer() {
   }
 }
 
-return app;
-}
-
 console.log("🚀 Server-Config:");
 console.log(
   "JWT_SECRET:",
@@ -619,6 +554,4 @@ console.log(
 console.log("PORT:", process.env.PORT);
 console.log("VITE_API_URL:", process.env.VITE_API_URL);
 
-if (process.env.NODE_ENV !== 'test') {
 startServer();
-}
