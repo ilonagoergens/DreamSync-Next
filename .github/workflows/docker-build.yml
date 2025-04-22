@@ -63,13 +63,16 @@ jobs:
       - name: Verify Azure Login
         run: az acr list --output json
 
+      - name: Docker Login to ACR
+        run: az acr login --name ${{ secrets.ACR_REGISTRY }}
+
       - name: Build and push Backend Image
         uses: docker/build-push-action@v2
         with:
           context: ./
           file: Dockerfile.backend
           push: true
-          tags: ${{ secrets.ACR_REGISTRY }}/backend:latest, ${{ secrets.ACR_REGISTRY }}/backend:${{ github.sha }}
+          tags: ${{ secrets.ACR_REGISTRY }}/backend:latest
           build-args: |
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             PORT=${{ secrets.PORT }}
