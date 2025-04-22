@@ -47,78 +47,41 @@ jobs:
       - name: Run Frontend Tests
         working-directory: ./frontend
         run: npm run test:frontend
-
+ 
   build-and-push:
-    needs: run-tests  # Tests müssen bestanden sein
-    runs-on: ubuntu-latest # die issolierte Umgebung von GitHub Actions
-
-    env: # Umgebungsvariablen
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      PORT: ${{ secrets.PORT }}
-      VITE_API_URL: ${{ secrets.VITE_API_URL }}
-      VITE_CLIENT_URL: ${{ secrets.VITE_CLIENT_URL }}
-      CLIENT_ORIGIN: ${{ secrets.CLIENT_ORIGIN }}
-
+    needs: run-tests
+    runs-on: ubuntu-latest
     steps:
-      # Repository auschecken
       - name: Checkout Repository
         uses: actions/checkout@v2
-      # Docker login datem von GitHub Secrets
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      # Backend Image bauen und pushen
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Build and push Backend Image
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./backend
           file: Dockerfile.backend
-          push: true # sorgt dafür, dass das Image gepusht wird
-          tags: ${{ secrets.DOCKER_USERNAME }}/backend:latest
+          push: true
+          tags: ${{ secrets.ACR_REGISTRY }}/${{ secrets.ACR_USERNAME }}/backend:latest,${{ secrets.ACR_REGISTRY }}.azurecr.io/${{ secrets.ACR_USERNAME }}/backend:latest
           build-args: |
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             PORT=${{ secrets.PORT }}
-            CLIENT_ORIGIN=${{ secrets.CLIENT_ORIGIN }}
-      # Frontend Image bauen und pushen
+            CLIENT_ORIGIN=${{ secrets.CLIENT_ORIGIN }} # Beachte: Wird idealerweise in ACA gesetzt
+
       - name: Build and push Frontend Image
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./frontend
           file: Dockerfile.frontend
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+          tags: ${{ secrets.ACR_REGISTRY }}.azurecr.io/${{ secrets.ACR_USERNAME }}/frontend:latest
           build-args: |
             VITE_API_URL=${{ secrets.VITE_API_URL }}
             VITE_CLIENT_URL=${{ secrets.VITE_CLIENT_URL }}
- 
-  deploy-to-ec2:
-    needs: build-and-push
-    runs-on: ubuntu-latest
 
-    steps:
-      - name: Deploy on EC2 via SSH
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            docker stop dreamsync-backend || true
-            docker rm dreamsync-backend || true
-            docker rmi ${{ secrets.DOCKER_USERNAME }}/backend:latest || true
-            docker pull ${{ secrets.DOCKER_USERNAME }}/backend:latest
-            docker run -d \
-              --name dreamsync-backend \
-              --env-file /home/ubuntu/.env \
-              -p 3000:3000 \
-              -v /home/ubuntu/data:/app/backend/data \
-              ${{ secrets.DOCKER_USERNAME }}/backend:latest
-
-
-            docker stop dreamsync-frontend || true
-            docker rm dreamsync-frontend || true
-            docker rmi ${{ secrets.DOCKER_USERNAME }}/frontend:latest || true
-            docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:latest
-            docker run -d --name dreamsync-frontend -p 8080:80 ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+      - name: Azure Logout
+        run: az logout
