@@ -47,7 +47,7 @@ jobs:
       - name: Run Frontend Tests
         working-directory: ./frontend
         run: npm run test:frontend
- 
+
   build-and-push:
     needs: run-tests
     runs-on: ubuntu-latest
@@ -60,13 +60,16 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Verify Azure Login
+        run: az acr list --output json
+
       - name: Build and push Backend Image
         uses: docker/build-push-action@v2
         with:
           context: ./
           file: Dockerfile.backend
           push: true
-          tags: ${{ secrets.ACR_REGISTRY }}/${{ secrets.ACR_USERNAME }}/backend:latest,${{ secrets.ACR_REGISTRY }}.azurecr.io/${{ secrets.ACR_USERNAME }}/backend:latest
+          tags: ${{ secrets.ACR_REGISTRY }}/backend:latest, ${{ secrets.ACR_REGISTRY }}/backend:${{ github.sha }}
           build-args: |
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             PORT=${{ secrets.PORT }}
@@ -78,7 +81,7 @@ jobs:
           context: ./frontend
           file: Dockerfile.frontend
           push: true
-          tags: ${{ secrets.ACR_REGISTRY }}.azurecr.io/${{ secrets.ACR_USERNAME }}/frontend:latest
+          tags: ${{ secrets.ACR_REGISTRY }}/frontend:latest
           build-args: |
             VITE_API_URL=${{ secrets.VITE_API_URL }}
             VITE_CLIENT_URL=${{ secrets.VITE_CLIENT_URL }}
