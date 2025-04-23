@@ -5,7 +5,14 @@ import express from "express";
 import cors from "cors";
 import bcrypt from "bcryptjs";
 import { generateToken, authMiddleware } from "./auth.js";
-import { initializeDatabase, getDatabase, closeDatabase, createVisionItem, updateVisionItem, deleteVisionItem } from "./database.js";
+import {
+  initializeDatabase,
+  getDatabase,
+  closeDatabase,
+  createVisionItem,
+  updateVisionItem,
+  deleteVisionItem,
+} from "./database.js";
 
 dotenv.config();
 
@@ -15,7 +22,11 @@ let server;
 
 const allowedOrigins = process.env.CLIENT_ORIGIN
   ? process.env.CLIENT_ORIGIN.split(",")
-  : ["http://localhost:5173", 'http://localhost:8080', "https://frontend-app.thankfulgrass-a2fd0f75.westeurope.azurecontainerapps.io"];
+  : [
+      "http://localhost:5173",
+      "http://localhost:8080",
+      "https://frontend-app.thankfulgrass-a2fd0f75.westeurope.azurecontainerapps.io",
+    ];
 
 function generateUUID() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -32,21 +43,26 @@ async function startServer() {
 
     const app = express();
 
-    app.use(
-      cors({
-        origin: function (origin, callback) {
-          if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-          } else {
-            console.log("❌ Nicht erlaubter Origin:", origin);
-            callback(new Error("Nicht erlaubter Origin"));
-          }
-        },
-        credentials: true,
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-      })
-    );
+    //app.use(
+    //   cors({
+    //    origin: function (origin, callback) {
+    //      if (!origin || allowedOrigins.includes(origin)) {
+    //        callback(null, true);
+    //      } else {
+    //        console.log("❌ Nicht erlaubter Origin:", origin);
+    //        callback(new Error("Nicht erlaubter Origin"));
+    //      }
+    //    },
+    //    credentials: true,
+    //    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    //    allowedHeaders: ["Content-Type", "Authorization"],
+    //  })
+    //);
+
+    // Verwende eine einfache, erlaubende CORS-Konfiguration (NUR ZUM TESTEN!)
+    app.use(cors());
+    app.use(express.json({ limit: "10mb" }));
+    // ...
 
     app.use(express.json({ limit: "10mb" }));
 
@@ -158,8 +174,7 @@ async function startServer() {
         });
 
         const id = generateUUID();
-        const entryDate = date || new Date().toISOString().split('T')[0];
-
+        const entryDate = date || new Date().toISOString().split("T")[0];
 
         await db.execute({
           sql: "INSERT INTO energy_entries (id, user_id, level, notes, date) VALUES (?, ?, ?, ?, ?)",
@@ -178,20 +193,19 @@ async function startServer() {
         const db = await getDatabase();
         const userId = req.user.userId;
         const { id } = req.params;
-    
+
         // Eintrag in der Datenbank löschen
         await db.execute({
           sql: "DELETE FROM energy_entries WHERE id = ? AND user_id = ?",
           args: [id, userId],
         });
-    
+
         res.json({ success: true });
       } catch (error) {
         console.error("❌ Fehler beim Löschen des Energie-Eintrags:", error);
         res.status(500).json({ error: "Eintrag konnte nicht gelöscht werden" });
       }
     });
-    
 
     // 🔄 Manifestationen abrufen
     app.get("/api/manifestations", authMiddleware, async (req, res) => {
@@ -304,10 +318,9 @@ async function startServer() {
       try {
         const db = await getDatabase();
         const userId = req.user.userId;
-        const {
-          image_url, section, text, x, y, width, height, zIndex
-        } = req.body;
-    
+        const { image_url, section, text, x, y, width, height, zIndex } =
+          req.body;
+
         const id = generateUUID();
         const item = {
           id,
@@ -319,14 +332,16 @@ async function startServer() {
           y,
           width,
           height,
-          zIndex
+          zIndex,
         };
-    
+
         await createVisionItem(item);
         res.status(201).json({ ...item, image_url });
       } catch (error) {
         console.error("❌ Fehler beim Erstellen eines Vision-Items:", error);
-        res.status(500).json({ error: "Vision Item konnte nicht erstellt werden" });
+        res
+          .status(500)
+          .json({ error: "Vision Item konnte nicht erstellt werden" });
       }
     });
 
@@ -335,10 +350,9 @@ async function startServer() {
         const db = await getDatabase();
         const userId = req.user.userId;
         const { id } = req.params;
-        const {
-          image_url, section, text, x, y, width, height, zIndex
-        } = req.body;
-    
+        const { image_url, section, text, x, y, width, height, zIndex } =
+          req.body;
+
         const updates = {
           imageUrl: image_url,
           section,
@@ -347,32 +361,34 @@ async function startServer() {
           y,
           width,
           height,
-          zIndex
+          zIndex,
         };
-    
+
         const updated = await updateVisionItem(id, userId, updates);
         res.json({ ...updated, image_url });
       } catch (error) {
         console.error("❌ Fehler beim Aktualisieren des Vision-Items:", error);
-        res.status(500).json({ error: "Vision Item konnte nicht aktualisiert werden" });
+        res
+          .status(500)
+          .json({ error: "Vision Item konnte nicht aktualisiert werden" });
       }
     });
-    
+
     app.delete("/api/vision-items/:id", authMiddleware, async (req, res) => {
       try {
         const db = await getDatabase();
         const userId = req.user.userId;
         const { id } = req.params;
-    
+
         await deleteVisionItem(id, userId);
         res.json({ success: true });
       } catch (error) {
         console.error("❌ Fehler beim Löschen des Vision-Items:", error);
-        res.status(500).json({ error: "Vision Item konnte nicht gelöscht werden" });
+        res
+          .status(500)
+          .json({ error: "Vision Item konnte nicht gelöscht werden" });
       }
     });
-    
-    
 
     // 🔄 Empfehlungen abrufen
     app.get("/api/recommendations", authMiddleware, async (req, res) => {
@@ -530,7 +546,6 @@ async function startServer() {
     });
 
     return server;
-
   } catch (error) {
     console.error("❌ Fehler beim Starten des Servers:", error);
     process.exit(1);
@@ -562,4 +577,3 @@ async function shutdown() {
   }
   process.exit(0);
 }
-
