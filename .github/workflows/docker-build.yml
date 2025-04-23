@@ -81,8 +81,8 @@ jobs:
       - name: Build and push Frontend Image
         uses: docker/build-push-action@v2
         with:
-          context: ./ # Geändert zu Hauptverzeichnis
-          file: ./frontend/Dockerfile.frontend # Pfad zum Dockerfile angepasst
+          context: ./ # Beibehalten: Build-Kontext ist das Hauptverzeichnis
+          file: Dockerfile.frontend # Geändert: Pfad ist jetzt relativ zum Hauptverzeichnis
           push: true
           tags: ${{ secrets.ACR_REGISTRY }}/frontend:latest
           build-args: |
