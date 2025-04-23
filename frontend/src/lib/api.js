@@ -20,7 +20,7 @@ api.interceptors.request.use(
 
 export const authApi = {
   loginWithEmail: async (email, password) => {
-    const response = await api.post("/api/auth/login", { email, password });
+    const response = await api.post("/auth/login", { email, password });
     if (response.data.token) {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userId", response.data.userId);
@@ -30,7 +30,7 @@ export const authApi = {
   },
 
   registerWithEmail: async (email, password) => {
-    const response = await api.post("/api/auth/register", { email, password });
+    const response = await api.post("/auth/register", { email, password });
     if (response.data.token) {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userId", response.data.userId);
@@ -64,29 +64,29 @@ api.interceptors.response.use(
 );
 
 export const visionApi = {
-  getAll: async () => api.get("/api/vision-items"),
-  create: async (data) => api.post("/api/vision-items", data),
-  update: async (id, data) => api.put(`/api/vision-items/${id}`, data),
-  delete: async (id) => api.delete(`/api/vision-items/${id}`),
+  getAll: async () => api.get("/vision-items"),
+  create: async (data) => api.post("/vision-items", data),
+  update: async (id, data) => api.put(`/vision-items/${id}`, data),
+  delete: async (id) => api.delete(`/vision-items/${id}`),
 };
 
 export const energyApi = {
-  getAll: async () => api.get("/api/energy-entries"),
-  create: async (data) => api.post("/api/energy-entries", data),
-  delete: async (id) => api.delete(`/api/energy-entries/${id}`),
+  getAll: async () => api.get("/energy-entries"),
+  create: async (data) => api.post("/energy-entries", data),
+  delete: async (id) => api.delete(`/energy-entries/${id}`),
 };
 
 export const manifestationApi = {
-  getAll: async () => api.get("/api/manifestations"),
-  create: async (data) => api.post("/api/manifestations", data),
-  update: async (id, data) => api.put(`/api/manifestations/${id}`, data),
-  delete: async (id) => api.delete(`/api/manifestations/${id}`),
+  getAll: async () => api.get("/manifestations"),
+  create: async (data) => api.post("/manifestations", data),
+  update: async (id, data) => api.put(`/manifestations/${id}`, data),
+  delete: async (id) => api.delete(`/manifestations/${id}`),
 };
 
 export const recommendationApi = {
-  getAll: async (energyLevel) => api.get("/api/recommendations", { params: { energyLevel } }),
-  create: async (data) => api.post("/api/recommendations", data),
-  update: async (id, data) => api.put(`/api/recommendations/${id}`, data),
-  delete: async (id) => api.delete(`/api/recommendations/${id}`),
-  getEnergyEntries: async () => api.get("/api/energy-entries"),
+  getAll: async (energyLevel) => api.get("/recommendations", { params: { energyLevel } }),
+  create: async (data) => api.post("/recommendations", data),
+  update: async (id, data) => api.put(`/recommendations/${id}`, data),
+  delete: async (id) => api.delete(`/recommendations/${id}`),
+  getEnergyEntries: async () => api.get("/energy-entries"),
 };
