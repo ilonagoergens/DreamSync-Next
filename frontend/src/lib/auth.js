@@ -7,8 +7,10 @@ export const useAuthStore = create((set) => ({
   userProfile: JSON.parse(localStorage.getItem('userProfile') || 'null'),
 
   loginWithEmail: async (email, password) => {
+    console.log("➡️ loginWithEmail im Store aufgerufen mit:", email, password); 
     try {
       const data = await authApi.loginWithEmail(email, password);
+      console.log("⬅️ API-Response in loginWithEmail:", data);
       if (!data?.token || !data?.userId || !data?.profile) {
         throw new Error('Ungültige Anmeldedaten');
       }

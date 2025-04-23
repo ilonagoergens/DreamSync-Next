@@ -4,8 +4,8 @@ import { useAppStore } from "../store";
 import { energyApi, manifestationApi, visionApi } from "../lib/api";
 
 function AuthPage() {
-  const loginWithEmail = useAuthStore(state => state.loginWithEmail);
-  const registerWithEmail = useAuthStore(state => state.registerWithEmail);
+  const loginWithEmail = useAuthStore((state) => state.loginWithEmail);
+  const registerWithEmail = useAuthStore((state) => state.registerWithEmail);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,28 +15,30 @@ function AuthPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    console.log("➡️ handleSubmit wurde aufgerufen");
 
     try {
       const authFn = isRegistering ? registerWithEmail : loginWithEmail;
+      console.log("➡️ authFn:", authFn);
+      console.log("➡️ Versuche Auth mit:", email, password);
       const res = await authFn(email, password);
+      console.log("🔑 Login-Response erhalten:", res);
 
-        console.log("🔑 Login-Response:", res);
+      const [energyRes, manifestationRes, visionRes] = await Promise.all([
+        energyApi.getAll(),
+        manifestationApi.getAll(),
+        visionApi.getAll(),
+      ]);
 
-        const [energyRes, manifestationRes, visionRes] = await Promise.all([
-          energyApi.getAll(),
-          manifestationApi.getAll(),
-          visionApi.getAll(),
-        ]);
+      useAppStore.setState({
+        token: res.token,
+        userId: res.userId,
+        energyEntries: energyRes.data,
+        manifestations: manifestationRes.data,
+        visionItems: visionRes.data,
+      });
 
-        useAppStore.setState({
-          token: res.token,
-          userId: res.userId,
-          energyEntries: energyRes.data,
-          manifestations: manifestationRes.data,
-          visionItems: visionRes.data,
-        });
-
-        console.log("✅ Daten aus der DB geladen!");
+      console.log("✅ Daten aus der DB geladen!");
     } catch (error) {
       console.error("❌ Auth-Fehler:", error);
       setError(error.message);
@@ -54,7 +56,9 @@ function AuthPage() {
 
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">E-Mail</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              E-Mail
+            </label>
             <input
               type="email"
               value={email}
@@ -65,7 +69,9 @@ function AuthPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Passwort</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Passwort
+            </label>
             <input
               type="password"
               value={password}
