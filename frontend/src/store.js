@@ -106,6 +106,7 @@ export const useAppStore = create(
 
         try {
           await apiFetch(`/energy-entries/${id}`, "DELETE", null, get().token);
+          console.log("✅ Energie-Eintrag erfolgreich gelöscht (Frontend):", id);
           set((state) => ({ energyEntries: state.energyEntries.filter((entry) => entry.id !== id) }));
         } catch (error) {
           console.error("❌ Fehler beim Löschen des Energie-Eintrags:", error);
