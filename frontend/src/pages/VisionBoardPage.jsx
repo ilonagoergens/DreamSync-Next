@@ -194,6 +194,7 @@ function VisionBoardPage() {
         <h2 className="text-2xl font-bold flex items-center gap-2">
         <ListChecks className="h-6 w-6 text-blue-600 dark:text-blue-400" />
           <span> Mein Vision Board 💫</span>
+          <p>Hello from pipline</p>
 
         </h2>
         <div className="flex gap-2">
