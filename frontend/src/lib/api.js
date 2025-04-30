@@ -62,7 +62,9 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
+api.get("/health", (req, res) => {
+  res.status(200).json({ message: "API is healthy" });
+})
 export const visionApi = {
   getAll: async () => api.get("/vision-items"),
   create: async (data) => api.post("/vision-items", data),
