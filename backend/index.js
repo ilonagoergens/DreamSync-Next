@@ -27,6 +27,7 @@ const allowedOrigins = process.env.CLIENT_ORIGIN
       "http://localhost:8080",
       "https://frontend-app.thankfulgrass-a2fd0f75.westeurope.azurecontainerapps.io",
     ];
+    console.log("✅ Erlaubte Origins:", allowedOrigins);
 
 function generateUUID() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
