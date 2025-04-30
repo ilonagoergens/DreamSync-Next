@@ -44,20 +44,20 @@ async function startServer() {
 
     const app = express();
 
-    app.use(
-       cors({
-        origin: function (origin, callback) {
-          if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-          } else {
-            console.log("❌ Nicht erlaubter Origin:", origin);
-            callback(new Error("Nicht erlaubter Origin"));
-          }
-        },
-        credentials: true,
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-      })
+    app.use(cors()
+      //  cors({
+      //   origin: function (origin, callback) {
+      //     if (!origin || allowedOrigins.includes(origin)) {
+      //       callback(null, true);
+      //     } else {
+      //       console.log("❌ Nicht erlaubter Origin:", origin);
+      //       callback(new Error("Nicht erlaubter Origin"));
+      //     }
+      //   },
+      //   credentials: true,
+      //   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      //   allowedHeaders: ["Content-Type", "Authorization"],
+      // })
     );
 
     app.use(express.json({ limit: "10mb" }));
