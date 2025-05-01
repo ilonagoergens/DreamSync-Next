@@ -90,5 +90,13 @@ jobs:
             VITE_CLIENT_URL=${{ secrets.VITE_CLIENT_URL }}
            # no-cache: true # Kannst diese Zeile fürs Erste drin lassen oder entfernen
 
+      - name: Update Azure Container App
+        run: |
+           az containerapp update \
+           --name <container-app-name> \
+           --resource-group <resource-group-name> \
+           --image ${{ secrets.ACR_REGISTRY }}/<image-name>:latest
+         
+
       - name: Azure Logout
         run: az logout
