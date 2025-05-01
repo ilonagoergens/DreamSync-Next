@@ -92,11 +92,11 @@ jobs:
 
       - name: Update Azure Container App
         run: |
-           az containerapp update \
-           --name <container-app-name> \
-           --resource-group <resource-group-name> \
-           --image ${{ secrets.ACR_REGISTRY }}/<image-name>:latest
-         
+         az containerapp update \
+         --name ${{ secrets.CONTAINER_APP_NAME }} \
+         --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} \
+         --set-container 'frontend'='${{ secrets.ACR_REGISTRY }}/frontend:latest' \
+         --set-container 'backend'='${{ secrets.ACR_REGISTRY }}/backend:latest'         
 
       - name: Azure Logout
         run: az logout
