@@ -90,13 +90,19 @@ jobs:
             VITE_CLIENT_URL=${{ secrets.VITE_CLIENT_URL }}
            # no-cache: true # Kannst diese Zeile fürs Erste drin lassen oder entfernen
 
-      - name: Update Azure Container App
+      - name: Update Frontend Container App
         run: |
-         az containerapp update \
-         --name ${{ secrets.CONTAINER_APP_NAME }} \
-         --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} \
-         --set-container 'frontend'='${{ secrets.ACR_REGISTRY }}/frontend:latest' \
-         --set-container 'backend'='${{ secrets.ACR_REGISTRY }}/backend:latest'         
+          az containerapp update \
+          --name frontend-app \
+          --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} \
+          --set-container 'frontend'='${{ secrets.ACR_REGISTRY }}/frontend:latest'
+           
+      - name: Update Backend Container App
+        run: |
+          az containerapp update \
+          --name backend-app \
+          --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} \
+          --set-container 'backend'='${{ secrets.ACR_REGISTRY }}/backend:latest'        
 
       - name: Azure Logout
         run: az logout
