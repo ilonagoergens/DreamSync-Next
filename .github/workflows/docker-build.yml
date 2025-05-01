@@ -95,14 +95,14 @@ jobs:
           az containerapp update \
           --name frontend-app \
           --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} \
-          --set-container 'frontend'='${{ secrets.ACR_REGISTRY }}/frontend:latest'
+          --set-container frontend='${{ secrets.ACR_REGISTRY }}/frontend:latest'
            
       - name: Update Backend Container App
         run: |
           az containerapp update \
           --name backend-app \
           --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} \
-          --set-container 'backend'='${{ secrets.ACR_REGISTRY }}/backend:latest'        
+          --set-container backend='${{ secrets.ACR_REGISTRY }}/backend:latest'        
 
       - name: Azure Logout
         run: az logout
